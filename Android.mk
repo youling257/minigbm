@@ -71,10 +71,12 @@ LOCAL_PROPRIETARY_MODULE := true
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 LOCAL_MODULE_SUFFIX := $(TARGET_SHLIB_SUFFIX)
-LOCAL_HEADER_LIBRARIES += \
-	libhardware_headers libnativebase_headers libsystem_headers
-LOCAL_SHARED_LIBRARIES += libnativewindow libsync liblog
+ifeq ($(shell test $(PLATFORM_SDK_VERSION) -ge 27; echo $$?), 0)
+LOCAL_SHARED_LIBRARIES += libnativewindow
 LOCAL_STATIC_LIBRARIES += libarect
+LOCAL_HEADER_LIBRARIES += libnativebase_headers libsystem_headers libhardware_headers
+endif
+LOCAL_SHARED_LIBRARIES += libsync liblog
 include $(BUILD_SHARED_LIBRARY)
 
 
