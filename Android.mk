@@ -1,6 +1,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
+BOARD_USES_MINIGBM := true
 ifeq ($(strip $(BOARD_USES_MINIGBM)), true)
 
 MINIGBM_GRALLOC_MK := $(call my-dir)/Android.gralloc.mk
