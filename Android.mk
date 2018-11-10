@@ -7,6 +7,7 @@ ifeq ($(strip $(BOARD_USES_MINIGBM)), true)
 MINIGBM_GRALLOC_MK := $(call my-dir)/Android.gralloc.mk
 LOCAL_PATH := $(call my-dir)
 intel_drivers := i915 i965
+radeon_drivers := r300 r600
 
 MINIGBM_SRC := \
 	amdgpu.c \
@@ -47,6 +48,12 @@ endif
 ifneq ($(filter meson, $(BOARD_GPU_DRIVERS)),)
 MINIGBM_CPPFLAGS += -DDRV_MESON
 MINIGBM_CFLAGS += -DDRV_MESON
+endif
+
+ifneq ($(filter $(radeon_drivers), $(BOARD_GPU_DRIVERS)),)
+MINIGBM_CPPFLAGS += -DDRV_RADEON
+MINIGBM_CFLAGS += -DDRV_RADEON
+LOCAL_SHARED_LIBRARIES += libdrm_radeon
 endif
 
 include $(CLEAR_VARS)
