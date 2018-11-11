@@ -43,6 +43,14 @@ MINIGBM_CPPFLAGS += -DDRV_MESON
 MINIGBM_CFLAGS += -DDRV_MESON
 endif
 
+ifneq ($(filter radeonsi, $(BOARD_GPU_DRIVERS)),)
+MINIGBM_CPPFLAGS += -DDRV_AMDGPU
+MINIGBM_CFLAGS += -DDRV_AMDGPU
+MINIGBM_INCLUDES += external/libdrm/amdgpu \
+		    external/mesa/include
+LOCAL_SHARED_LIBRARIES += libdrm_amdgpu
+endif
+
 include $(CLEAR_VARS)
 
 SUBDIRS := cros_gralloc
@@ -52,6 +60,7 @@ LOCAL_SHARED_LIBRARIES := \
 	libdrm
 
 LOCAL_SRC_FILES := $(MINIGBM_SRC)
+LOCAL_C_INCLUDES := $(MINIGBM_INCLUDES)
 
 include $(MINIGBM_GRALLOC_MK)
 
