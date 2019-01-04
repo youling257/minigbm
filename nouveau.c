@@ -8,7 +8,8 @@
 #include "helpers.h"
 #include "util.h"
 
-static const uint32_t render_target_formats[] = { DRM_FORMAT_ARGB8888, DRM_FORMAT_XRGB8888 };
+static const uint32_t render_target_formats[] = { DRM_FORMAT_ABGR8888, DRM_FORMAT_XBGR8888,
+						  DRM_FORMAT_ARGB8888, DRM_FORMAT_XRGB8888 };
 
 static int nouveau_init(struct driver *drv)
 {
