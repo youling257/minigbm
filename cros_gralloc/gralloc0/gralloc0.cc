@@ -129,6 +129,10 @@ static int gralloc0_alloc(alloc_device_t *dev, int w, int h, int format, int usa
 
 	supported = mod->driver->is_supported(&descriptor);
 	if (!supported && (usage & GRALLOC_USAGE_HW_COMPOSER)) {
+		drv_log("HWC combination unsupported, disabling BO_USE_SCANOUT -- HAL format: %u, HAL usage: %u, "
+			"drv_format: %4.4s, use_flags: %llu\n",
+			format, usage, reinterpret_cast<char *>(&descriptor.drm_format),
+			static_cast<unsigned long long>(descriptor.use_flags));
 		descriptor.use_flags &= ~BO_USE_SCANOUT;
 		supported = mod->driver->is_supported(&descriptor);
 	}
