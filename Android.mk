@@ -28,7 +28,7 @@ MINIGBM_CFLAGS := \
 	-D_GNU_SOURCE=1 -D_FILE_OFFSET_BITS=64 \
 	-Wall -Wsign-compare -Wpointer-arith \
 	-Wcast-qual -Wcast-align \
-	-Wno-unused-parameter
+	-Wno-unused-parameter -Wno-typedef-redefinition
 
 ifneq ($(filter $(intel_drivers), $(BOARD_GPU_DRIVERS)),)
 MINIGBM_CPPFLAGS += -DDRV_I915
