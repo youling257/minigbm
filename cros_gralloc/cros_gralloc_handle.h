@@ -7,7 +7,9 @@
 #ifndef CROS_GRALLOC_HANDLE_H
 #define CROS_GRALLOC_HANDLE_H
 
+#ifdef __cplusplus
 #include <cstdint>
+#endif
 #include <cutils/native_handle.h>
 
 #define DRV_MAX_PLANES 4
@@ -37,6 +39,7 @@ struct cros_gralloc_handle : public native_handle_t {
 	uint32_t pixel_stride;
 	int32_t droid_format;
 	int32_t usage; /* Android usage. */
+	uint32_t fb_id;
 	uint32_t num_planes;
 	uint64_t reserved_region_size;
 	uint64_t total_size; /* Total allocation size */

@@ -84,6 +84,10 @@ static struct driver *init_try_node(int idx, char const *str)
 	return drv;
 }
 
+int cros_gralloc_driver::get_fd() const {
+	return drv_get_fd(drv_);
+}
+
 int32_t cros_gralloc_driver::init()
 {
 	/*
@@ -111,6 +115,18 @@ int32_t cros_gralloc_driver::init()
 	// Try card nodes... for vkms mostly.
 	for (uint32_t i = min_card_node; i < max_card_node; i++) {
 		drv_ = init_try_node(i, card_nodes_fmt);
+		if (drv_)
+			return 0;
+	}
+
+	return -ENODEV;
+}
+
+int cros_gralloc_driver::init_master()
+{
+	int fd = open(DRM_DIR_NAME "/card0", O_RDWR, 0);
+	if (fd >= 0) {
+		drv_ = drv_create(fd);
 		if (drv_)
 			return 0;
 	}
