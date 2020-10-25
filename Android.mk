@@ -18,9 +18,7 @@ MINIGBM_SRC := \
 	helpers.c \
 	i915.c \
 	mediatek.c \
-	meson.c \
 	msm.c \
-	radeon.c \
 	rockchip.c \
 	vc4.c \
 	virtio_gpu.c
