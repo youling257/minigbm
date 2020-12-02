@@ -12,11 +12,11 @@
 struct cros_gralloc_buffer_descriptor {
 	uint32_t width;
 	uint32_t height;
-	int32_t droid_format;
-	int32_t droid_usage;
+	uint32_t consumer_usage;
+	uint32_t producer_usage;
+	uint32_t droid_format;
 	uint32_t drm_format;
 	uint64_t use_flags;
-	uint64_t reserved_region_size;
 	std::string name;
 };
 

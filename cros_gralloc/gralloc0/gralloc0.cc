@@ -135,10 +135,9 @@ static int gralloc0_alloc(alloc_device_t *dev, int w, int h, int format, int usa
 	descriptor.width = w;
 	descriptor.height = h;
 	descriptor.droid_format = format;
-	descriptor.droid_usage = usage;
+	descriptor.producer_usage = descriptor.consumer_usage = usage;
 	descriptor.drm_format = cros_gralloc_convert_format(format);
 	descriptor.use_flags = gralloc0_convert_usage(usage);
-	descriptor.reserved_region_size = 0;
 
 	supported = mod->driver->is_supported(&descriptor);
 	if (!supported && (usage & GRALLOC_USAGE_HW_COMPOSER)) {
