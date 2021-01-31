@@ -264,7 +264,7 @@ int32_t cros_gralloc_driver::allocate(const struct cros_gralloc_buffer_descripto
 	name = (char *)(&hnd->base.data[hnd->name_offset]);
 	snprintf(name, descriptor->name.size() + 1, "%s", descriptor->name.c_str());
 
-	id = hnd->id;
+	id = drv_bo_get_plane_handle(bo, 0).u32;
 	auto buffer = new cros_gralloc_buffer(id, bo, hnd, hnd->fds[hnd->num_planes],
 					      hnd->reserved_region_size);
 
@@ -293,7 +293,10 @@ int32_t cros_gralloc_driver::retain(buffer_handle_t handle)
 		return 0;
 	}
 
-	id = hnd->id;
+	if (drmPrimeFDToHandle(drv_get_fd(drv_), hnd->fds[0], &id)) {
+		drv_log("drmPrimeFDToHandle failed.\n");
+		return -errno;
+	}
 
 	if (buffers_.count(id)) {
 		buffer = buffers_[id];
@@ -316,6 +319,8 @@ int32_t cros_gralloc_driver::retain(buffer_handle_t handle)
 		bo = drv_bo_import(drv_, &data);
 		if (!bo)
 			return -EFAULT;
+
+		id = drv_bo_get_plane_handle(bo, 0).u32;
 
 		buffer = new cros_gralloc_buffer(id, bo, nullptr, hnd->fds[hnd->num_planes],
 						 hnd->reserved_region_size);
