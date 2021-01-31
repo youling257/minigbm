@@ -380,10 +380,10 @@ struct bo *drv_bo_import(struct driver *drv, struct drv_import_fd_data *data)
 		pthread_mutex_unlock(&bo->drv->driver_lock);
 	}
 
-	bo->meta.format_modifier = data->format_modifier;
 	for (plane = 0; plane < bo->meta.num_planes; plane++) {
 		bo->meta.strides[plane] = data->strides[plane];
 		bo->meta.offsets[plane] = data->offsets[plane];
+		bo->meta.format_modifiers[plane] = data->format_modifiers[plane];
 
 		seek_end = lseek(data->fds[plane], 0, SEEK_END);
 		if (seek_end == (off_t)(-1)) {
@@ -621,9 +621,10 @@ uint32_t drv_bo_get_plane_stride(struct bo *bo, size_t plane)
 	return bo->meta.strides[plane];
 }
 
-uint64_t drv_bo_get_format_modifier(struct bo *bo)
+uint64_t drv_bo_get_plane_format_modifier(struct bo *bo, size_t plane)
 {
-	return bo->meta.format_modifier;
+	assert(plane < bo->meta.num_planes);
+	return bo->meta.format_modifiers[plane];
 }
 
 uint32_t drv_bo_get_format(struct bo *bo)
@@ -686,7 +687,7 @@ int drv_resource_info(struct bo *bo, uint32_t strides[DRV_MAX_PLANES],
 		strides[plane] = bo->meta.strides[plane];
 		offsets[plane] = bo->meta.offsets[plane];
 	}
-	*format_modifier = bo->meta.format_modifier;
+	*format_modifier = bo->meta.format_modifiers[0];
 
 	if (bo->drv->backend->resource_info)
 		return bo->drv->backend->resource_info(bo, strides, offsets, format_modifier);

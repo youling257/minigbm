@@ -183,7 +183,7 @@ static int cross_domain_metadata_query(struct driver *drv, struct bo_metadata *m
 
 	memcpy(&metadata->strides, &addr[0], 4 * sizeof(uint32_t));
 	memcpy(&metadata->offsets, &addr[4], 4 * sizeof(uint32_t));
-	memcpy(&metadata->format_modifier, &addr[8], sizeof(uint64_t));
+	memcpy(&metadata->format_modifiers[0], &addr[8], sizeof(uint64_t));
 	memcpy(&metadata->total_size, &addr[10], sizeof(uint64_t));
 	memcpy(&metadata->blob_id, &addr[12], sizeof(uint64_t));
 
