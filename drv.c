@@ -600,9 +600,6 @@ int drv_bo_get_plane_fd(struct bo *bo, size_t plane)
 	if (ret)
 		ret = drmPrimeHandleToFD(bo->drv->fd, bo->handles[plane].u32, DRM_CLOEXEC, &fd);
 
-	if (ret)
-		drv_log("Failed to get plane fd: %s\n", strerror(errno));
-
 	return (ret) ? ret : fd;
 }
 
