@@ -16,12 +16,12 @@ MINIGBM_SRC := \
 	dumb_driver.c \
 	i915.c \
 	mediatek.c \
-	meson.c \
 	msm.c \
-	radeon.c \
 	rockchip.c \
 	vc4.c \
-	virtio_gpu.c
+	virtgpu.c \
+	virtgpu_cross_domain.c \
+	virtgpu_virgl.c
 
 MINIGBM_CPPFLAGS := -std=c++14
 MINIGBM_CFLAGS := \
