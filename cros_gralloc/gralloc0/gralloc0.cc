@@ -177,7 +177,7 @@ static int gralloc0_register_buffer(struct gralloc_module_t const *module, buffe
 	auto mod = const_cast<struct gralloc0_module *>(const_module);
 
 	if (!mod->initialized) {
-		if (gralloc0_init(mod, false))
+		if (gralloc0_init(mod, true))
 			return -ENODEV;
 	}
 
@@ -230,7 +230,7 @@ static int gralloc0_perform(struct gralloc_module_t const *module, int op, ...)
 	uint32_t *out_gralloc_usage;
 
 	if (!mod->initialized) {
-		if (gralloc0_init(mod, false))
+		if (gralloc0_init(mod, true))
 			return -ENODEV;
 	}
 
@@ -345,7 +345,7 @@ static int gralloc0_lock_async(struct gralloc_module_t const *module, buffer_han
 				  .height = static_cast<uint32_t>(h) };
 
 	if (!mod->initialized) {
-		if (gralloc0_init(mod, false))
+		if (gralloc0_init(mod, true))
 			return -ENODEV;
 	}
 
@@ -396,7 +396,7 @@ static int gralloc0_lock_async_ycbcr(struct gralloc_module_t const *module, buff
 				  .height = static_cast<uint32_t>(h) };
 
 	if (!mod->initialized) {
-		if (gralloc0_init(mod, false))
+		if (gralloc0_init(mod, true))
 			return -ENODEV;
 	}
 
