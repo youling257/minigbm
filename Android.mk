@@ -5,7 +5,6 @@ ifeq ($(strip $(BOARD_USES_MINIGBM)), true)
 
 MINIGBM_GRALLOC_MK := $(call my-dir)/Android.gralloc.mk
 LOCAL_PATH := $(call my-dir)
-intel_drivers := i915 i965
 
 MINIGBM_SRC := \
 	amdgpu.c \
@@ -24,7 +23,16 @@ MINIGBM_SRC := \
 	virtgpu_virgl.c
 
 MINIGBM_CPPFLAGS := -std=c++14
+
+MINIGBM_CFLAGS_32 += \
+	-DDRI_DRIVER_DIR=/vendor/lib/dri
+
+MINIGBM_CFLAGS_64 += \
+	-DDRI_DRIVER_DIR=/vendor/lib64/dri
+
 MINIGBM_CFLAGS := \
+	-DDRV_AMDGPU \
+	-DDRV_I915 \
 	-D_GNU_SOURCE=1 -D_FILE_OFFSET_BITS=64 \
 	-Wall -Wsign-compare -Wpointer-arith \
 	-Wcast-qual -Wcast-align \
@@ -32,16 +40,10 @@ MINIGBM_CFLAGS := \
 	-Wno-missing-field-initializers \
 	-Wno-invalid-offsetof
 
-ifneq ($(filter $(intel_drivers), $(BOARD_GPU_DRIVERS)),)
-MINIGBM_CPPFLAGS += -DDRV_I915
-MINIGBM_CFLAGS += -DDRV_I915
-LOCAL_SHARED_LIBRARIES += libdrm_intel
-endif
+MINIGBM_INCLUDES += external/libdrm/amdgpu \
+		    external/mesa/include
 
-ifneq ($(filter meson, $(BOARD_GPU_DRIVERS)),)
-MINIGBM_CPPFLAGS += -DDRV_MESON
-MINIGBM_CFLAGS += -DDRV_MESON
-endif
+LOCAL_SHARED_LIBRARIES += libdrm_amdgpu libdrm_intel
 
 include $(CLEAR_VARS)
 
@@ -52,11 +54,14 @@ LOCAL_SHARED_LIBRARIES := \
 	libdrm
 
 LOCAL_SRC_FILES := $(MINIGBM_SRC)
+LOCAL_C_INCLUDES := $(MINIGBM_INCLUDES)
 
 include $(MINIGBM_GRALLOC_MK)
 
 LOCAL_CFLAGS := $(MINIGBM_CFLAGS)
 LOCAL_CPPFLAGS := $(MINIGBM_CPPFLAGS)
+LOCAL_CFLAGS_32 := $(MINIGBM_CFLAGS_32)
+LOCAL_CFLAGS_64 :=$(MINIGBM_CFLAGS_64)
 
 LOCAL_MODULE := gralloc.minigbm
 LOCAL_MODULE_TAGS := optional
